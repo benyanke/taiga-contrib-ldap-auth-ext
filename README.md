@@ -62,12 +62,18 @@ LDAP_FULL_NAME_ATTRIBUTE = 'displayName'
 # Upon successful LDAP bind, will override returned username attribute
 # value. May result in unexpected failures if changed after the database
 # has been populated.
+# 
 def _ldap_slugify(uid: str) -> str:
     # example: force lower-case
     #uid = uid.lower()
     return uid
-
+    
+# To enable the function above, uncomment the line below to store the function in the variable
 #LDAP_MAP_USERNAME_TO_UID = _ldap_slugify
+
+# Similarly, you can apply filters to the email and name by defining functions and specifying them here in the same way
+#LDAP_MAP_EMAIL = _ldap_map_email
+#LDAP_MAP_NAME = _ldap_map_name
 
 
 ```
@@ -93,6 +99,10 @@ network) permissions should be granted for this user because you need
 to specify the service account password in the configuration file. A
 suitably strong password should be chosen, eg. VmLYBbvJaf2kAqcrt5HjHdG6
 
+
+**Notes:**
+* if you are using the Taiga's built-in `USER_EMAIL_ALLOWED_DOMAINS` config option, all LDAP email addresses will still be filtered through this list. Ensure that if `USER_EMAIL_ALLOWED_DOMAINS` != `None`, that your corporate LDAP email domain is also listed there. This is due to the fact that LDAP users are automatically "registered" behind the scenes on their first login.
+* if you plan to only allow your LDAP users to access Taiga, set the `PUBLIC_REGISTER_ENABLED` config option to `False`. This will prevent any external user to register while still automatically register LDAP users on their first login.
 
 ### taiga-front
 
